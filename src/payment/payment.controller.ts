@@ -1,5 +1,5 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
-import { IsString } from 'class-validator';
+import { Body, Controller, Headers, Param, Post } from '@nestjs/common';
+import { IsOptional, IsString } from 'class-validator';
 import { PaymentService } from './payment.service';
 
 class WebhookDto {
@@ -14,6 +14,10 @@ class WebhookDto {
 
   @IsString()
   paymentRef!: string;
+
+  @IsOptional()
+  @IsString()
+  rawBody?: string;
 }
 
 @Controller('payments')
@@ -26,7 +30,11 @@ export class PaymentController {
   }
 
   @Post('webhook')
-  webhook(@Body() body: WebhookDto) {
-    return this.paymentService.handleWebhook(body);
+  webhook(
+    @Body() body: WebhookDto,
+    @Headers('x-razorpay-signature') signature?: string,
+  ) {
+    const rawBody = body.rawBody ?? JSON.stringify(body);
+    return this.paymentService.handleWebhook(body, signature, rawBody);
   }
 }

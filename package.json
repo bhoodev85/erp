@@ -23,7 +23,8 @@
     "mongoose": "^8.6.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "razorpay": "^2.9.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.5",
